@@ -1,0 +1,17 @@
+# External Libraries
+#multiprocessing
+statistics
+tabulate
+PyMuPDF
+pillow>=9.0.1
+opencv-python
+numpy>=1.20
+matplotlib
+scikit-learn
+scikit-image
+pytesseract
+imagehash
+python-Levenshtein
+networkx
+pyvis
+packaging>=21.3
