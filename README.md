@@ -5,7 +5,7 @@ to determine which images are similar to one another and combining them into
 a cluster.
 
 ```
-Similarity (confusion) matrix := ![ A*A' + !(A) * !(A') ]
+Similarity (confusion) matrix := ![ A'*A + !(A') * !(A) ]
 
 This alone however is not yet enough... If vecA is all 1 and vecB is all 0 the result of vecA x vecB is 0
 
