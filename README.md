@@ -19,6 +19,7 @@ Possibly using larger of either sum of digits of vector as expected similarity v
    - [ImageHash](https://github.com/JohannesBuchner/imagehash)
    - [NumPy](https://numpy.org/)
    - [matplotlib](https://matplotlib.org/)
+   - [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html#installing-with-apt)
 
 
 # Dataset
@@ -57,3 +58,8 @@ Naming scheme of pickle files:
 
 
 # Quick Start
+```
+./main.py -i data/prehashed-64/ -o .output -n 11
+```
+
+**Note:** Drawing of the clusters is not actually done yet...
