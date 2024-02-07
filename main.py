@@ -6,7 +6,6 @@ import os, sys, re, io, locale, json, pickle
 import traceback
 import argparse
 import logging
-import time
 
 from pathlib import Path
 
@@ -23,47 +22,12 @@ import copy
 import collections
 import string
 
-import statistics
-import random
-
 from tabulate import tabulate
 
-import fitz
-
-from PIL import Image
-import cv2
 import numpy as np
+import cupy as cp
 
-import matplotlib
-matplotlib.use('TkAgg')
-import matplotlib.pyplot as plt
-
-import sklearn
-import sklearn.metrics
-
-import skimage
-import skimage.data
-import skimage.draw
-import skimage.io
-import skimage.transform
-import skimage.color
-import skimage.feature
-import skimage.filters
-import skimage.filters.thresholding
-import skimage.exposure
-import skimage.morphology
-import skimage.restoration
-import skimage.util
-import skimage.util.shape
-import skimage.measure
-
-import pytesseract
 import imagehash
-
-import Levenshtein
-
-import networkx as nx
-import pyvis
 
 
 DIFF_THRESHOLD = 0.15
