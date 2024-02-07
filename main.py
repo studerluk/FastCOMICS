@@ -74,7 +74,7 @@ class Hashes():
 def run_fastcomics(hashes, hash_length):
 	start_time = time.time()
 
-	avg_hashes = [h.average.hash.reshape(-1, 1) for h in hashes]
+	avg_hashes = [h.average.hash.reshape(-1, 1).astype(int) for h in hashes]
 	avg_mat = np.concatenate(avg_hashes, axis=1)
 	avg_conf_mat = np.dot(avg_mat.T, avg_mat) + np.dot(1 - avg_mat.T, 1 - avg_mat)
 	avg_conf_mat_norm = avg_conf_mat / hash_length
@@ -90,7 +90,7 @@ def run_fastcomics(hashes, hash_length):
 def run_fastcomics_gpu(hashes, hash_length):
 	start_time = time.time()
 
-	avg_hashes = [cp.array(h.average.hash).reshape(-1, 1) for h in hashes]
+	avg_hashes = [cp.array(h.average.hash).reshape(-1, 1).astype(int) for h in hashes]
 	avg_mat = cp.concatenate(avg_hashes, axis=1)
 	avg_conf_mat = cp.dot(avg_mat.T, avg_mat) + cp.dot(1 - avg_mat.T, 1 - avg_mat)
 	avg_conf_mat_norm = avg_conf_mat / hash_length
@@ -109,10 +109,10 @@ def run_conventional(hashes, hash_length):
 	avg_conf_mat_norm = []
 	for i in range(len(hashes)):
 		temp = []
-		for j in range(i+1, len(hashes)):
+		for j in range(i, len(hashes)):
 			hash_diff = hashes[i].average - hashes[j].average
 			hash_diff = hash_diff / hash_length
-			temp.append(hash_diff)
+			temp.append(1 - hash_diff)
 
 		avg_conf_mat_norm.append(temp)
 
@@ -127,6 +127,7 @@ def run_conventional(hashes, hash_length):
 def process_in_parallel(i, j, a, b, hash_length):
 	hash_diff = hashes[i].average - hashes[j].average
 	hash_diff = hash_diff / hash_length
+	hash_diff = 1 - hash_diff
 
 	return (i, j, hash_diff)
 
@@ -202,4 +203,3 @@ if __name__ == "__main__":
 	fastcomics_gpu_mat = run_fastcomics_gpu(hashes, hash_length)
 
 	logging.info("Done.")
-	import pdb; pdb.set_trace()
