@@ -6,12 +6,6 @@ a cluster.
 
 ```
 Similarity (confusion) matrix := ![ A'*A + !(A') * !(A) ]
-
-This alone however is not yet enough... If vecA is all 1 and vecB is all 0 the result of vecA x vecB is 0
-
-Use sum of digits some how... Maybe...
-
-Possibly using larger of either sum of digits of vector as expected similarity value
 ```
 
 # Requirements
