@@ -25,6 +25,7 @@ import string
 from tabulate import tabulate
 
 import numpy as np
+import cupy as cp
 
 import imagehash
 
@@ -82,6 +83,22 @@ def run_fastcomics(hashes, hash_length):
 	duration = end_time - start_time
 
 	logging.info(f"FastCOMICs:     {duration: >3.3f}s")
+
+	return avg_conf_mat_norm
+
+
+def run_fastcomics_gpu(hashes, hash_length):
+	start_time = time.time()
+
+	avg_hashes = [cp.array(h.average.hash).reshape(-1, 1).astype(int) for h in hashes]
+	avg_mat = cp.concatenate(avg_hashes, axis=1)
+	avg_conf_mat = cp.dot(avg_mat.T, avg_mat) + cp.dot(1 - avg_mat.T, 1 - avg_mat)
+	avg_conf_mat_norm = avg_conf_mat / hash_length
+
+	end_time = time.time()
+	duration = end_time - start_time
+
+	logging.info(f"FastCOMICs GPU: {duration: >3.3f}s")
 
 	return avg_conf_mat_norm
 
@@ -182,5 +199,7 @@ if __name__ == "__main__":
 	#parallel_mat = run_parallel(hashes, hash_length, args['n_threads'])
 
 	fastcomics_mat = run_fastcomics(hashes, hash_length)
+
+	fastcomics_gpu_mat = run_fastcomics_gpu(hashes, hash_length)
 
 	logging.info("Done.")
