@@ -1,10 +1,10 @@
 # Dependency provider
-FROM ubuntu:latest as build-deps-provider
+FROM ubuntu:latest AS build-deps-provider
 COPY requirements.txt /tmp/requirements.txt
 
 # -----------------------------------------------------------------------------
 # FastComICs
-FROM ubuntu:latest as fastcomics
+FROM ubuntu:latest AS fastcomics
 
 RUN apt update && apt upgrade -y \
 	&& apt install -y \
