@@ -3,6 +3,7 @@
 
 # import the necessary packages
 import os, sys, re, io, locale, json, pickle
+import math
 import traceback
 import argparse
 import logging
@@ -33,7 +34,7 @@ DIFF_THRESHOLD = 0.15
 
 DEBUGGING=False
 
-logging.basicConfig(format='[%(levelname)s] %(message)s', level=logging.INFO)
+logging.basicConfig(format='[%(levelname)s] %(message)s', level=logging.DEBUG)
 
 def parse_args():
 	parser = argparse.ArgumentParser()
@@ -107,12 +108,17 @@ def run_conventional(hashes, hash_length):
 	return avg_conf_mat_norm
 
 
-def process_in_parallel(i, j, a, b, hash_length):
-	hash_diff = hashes[i].average - hashes[j].average
-	hash_diff = hash_diff / hash_length
-	hash_diff = 1 - hash_diff
+def process_in_parallel(i, a, hashes, hash_length):
+	results = []
 
-	return (i, j, hash_diff)
+	for j in range(len(hashes)):
+		hash_diff = a.average - hashes[j].average
+		hash_diff = hash_diff / hash_length
+		hash_diff = 1 - hash_diff
+		results.append(hash_diff)
+
+	print(f"done {i}")
+	return i, results
 
 def run_parallel(hashes, hash_length, n):
 	start_time = time.time()
@@ -123,24 +129,21 @@ def run_parallel(hashes, hash_length, n):
 
 	results = []
 	for i in range(len(hashes)):
-		temp = []
-		for j in range(i, len(hashes)):
-			try:
-				result = pool.apply_async(process_in_parallel, (i, j, hashes[i], hashes[j], hash_length))
-				results.append(result)
-				temp.append(None)
+		try:
+			result = pool.apply_async(process_in_parallel, (i, hashes[i], hashes[i:len(hashes)], hash_length))
+			results.append(result)
 
-			except Exception as e:
-				logging.error('Error in page:', page.number +1)
-				traceback.print_exception(*sys.exc_info())
+		except Exception as e:
+			logging.error(f"Error in hash: {i}")
+			traceback.print_exception(*sys.exc_info())
 
-				if DEBUGGING:
-					import pdb; pdb.set_trace()
+			if DEBUGGING:
+				import pdb; pdb.set_trace()
 
-		avg_conf_mat_norm.append(temp)
+		avg_conf_mat_norm.append([None] * len(hashes))
 
 
-	#print("waiting for completion")
+	logging.debug("Waiting for processes to finish")
 	wait = True
 	while wait:
 		wait = False
@@ -148,12 +151,14 @@ def run_parallel(hashes, hash_length, n):
 			if not result.ready():
 				wait = True
 			else:
-				i, j, diff = result.get()
+				i, diffs = result.get()
 
-				avg_conf_mat_norm[i][j] = diff
+				avg_conf_mat_norm[i] = diffs
 
 				results.remove(result)
 				del result
+
+		time.sleep(1)
 
 	results = []
 
