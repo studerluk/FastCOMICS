@@ -8,6 +8,24 @@ a cluster.
 Similarity (confusion) matrix := ![ A'*A + !(A') * !(A) ]
 ```
 
+![Construction of the image matrix](doc/img-mat.png)
+
+![Calculation of the confusion matrix](doc/conf-mat.png)
+
+| Method                  | Duration w/ 64-bit hashes | Duration w/ 1024-bit hashes |
+| ----------------------- | ------------------------- | --------------------------- |
+| Conventional            | ~36s                      | ~40s                        |
+| Conventional, Parallel  | n/a *                     | n/a *                       |
+| FastCOMICs              | ~2s                       | ~48s **                     |
+| FastCOMICs, GPU         | ~4s                       | ~3s                         |
+
+> \* Note: running the comparison of hashes in parallel seems to cause more overhead
+> for spawning the threads than time being saved. Therefore, this approach was often
+> way slower than simple, nested for-loops.
+
+> \*\* Running the matrix computation with 1024-bit hashes on the CPU seems to blow
+> some cache capacity resulting in increased computation time.
+
 # Requirements
  - Python
    - [ImageHash](https://github.com/JohannesBuchner/imagehash)
