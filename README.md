@@ -1,6 +1,6 @@
-# Fast ComICS
+# FastCOMICS
 
-Fast Comprehensive Image Clustering by Similarity (Fast ComICS) is a method
+Fast COMprehensive Image Clustering by Similarity (FastCOMICS) is a method
 to determine which images are similar to one another and combining them into
 a cluster.
 
@@ -16,8 +16,8 @@ Similarity (confusion) matrix := ![ A'*A + !(A') * !(A) ]
 | ----------------------- | ------------------------- | --------------------------- |
 | Conventional            | ~36s                      | ~40s                        |
 | Conventional, Parallel  | n/a *                     | n/a *                       |
-| FastCOMICs              | ~2s                       | ~48s **                     |
-| FastCOMICs, GPU         | ~4s                       | ~3s                         |
+| FastCOMICS              | ~2s                       | ~48s **                     |
+| FastCOMICS, GPU         | ~4s                       | ~3s                         |
 
 > \* Note: running the comparison of hashes in parallel seems to cause more overhead
 > for spawning the threads than time being saved. Therefore, this approach was often

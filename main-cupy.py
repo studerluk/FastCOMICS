@@ -83,7 +83,7 @@ def run_fastcomics(hashes, hash_length):
 	end_time = time.time()
 	duration = end_time - start_time
 
-	logging.info(f"FastCOMICs:     {duration: >3.3f}s")
+	logging.info(f"FastCOMICS:     {duration: >3.3f}s")
 
 	return avg_conf_mat_norm
 
@@ -99,7 +99,7 @@ def run_fastcomics_gpu(hashes, hash_length):
 	end_time = time.time()
 	duration = end_time - start_time
 
-	logging.info(f"FastCOMICs GPU: {duration: >3.3f}s")
+	logging.info(f"FastCOMICS GPU: {duration: >3.3f}s")
 
 	return avg_conf_mat_norm
 
